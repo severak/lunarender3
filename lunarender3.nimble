@@ -13,10 +13,11 @@ bin           = @["lunarender3"]
 requires "nim >= 1.6.2"
 requires "jester >= 0.5.0"
 requires "pixie >= 3.1.2"
-# TODO - requires nimpb
-# TODO - required zippy 0.7.4
+requires "nimpb >= 0.2.0"
+requires "zippy >= 0.7.4"
 
+task genparser, "Generates MVT parser.":
+    exec "nimpb_build -I=src --out=src src/vector_tile.proto"
 
-# TODO - tasky
-# nimpb_build -I=src --out=src src/vector_tile.proto
-# nim c -r src\tile.nim
+task testtile, "Test tile reading code.":
+    exec "nim c -r src/tile.nim"
