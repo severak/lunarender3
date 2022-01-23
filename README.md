@@ -8,7 +8,7 @@ status: I can read PBF/MVT, now I need to understand what's inside.
 
 1. use [tilemaker](https://github.com/systemed/tilemaker) to make vector tiles
 2. use this (*lunarender3*) tool to render map
-3. profit! (or at least map with nice colors)
+3. profit! (or at least have map with nice colors)
 
 I am far away from point 3, but I have some ideas:
 
@@ -19,3 +19,9 @@ I am far away from point 3, but I have some ideas:
 
 - original [lunarender](https://github.com/severak/lunarender)
 - 2018 [proof of concept](https://github.com/severak/lunatest) in Go
+
+## data & links
+
+- [Vector tile specification](https://github.com/mapbox/vector-tile-spec) (as we are implementing our own parser)
+- [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luexembourg from OpenMapTiles)
+- [OpenMapTiles schema](https://openmaptiles.org/schema/)
