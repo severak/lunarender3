@@ -3,6 +3,8 @@ import zippy
 import nimpb/nimpb
 import vector_tile_pb
 
+import pixie
+
 const CMD_MOVE_TO = 1
 const CMD_LINE_TO = 2
 const CMD_SEG_END = 7
@@ -34,13 +36,16 @@ proc cmdToStr(cmd: uint32): string =
         "?"
 
 when isMainModule:
+    let img = newImage(4096, 4096)
+
     echo "OK"
     let testFile = readFile("src/test.bin")
     # TODO - uncompress only when needed
     let tileSrc = uncompress(testFile)
     let tile = readvector_tile_Tile(newStringStream(tileSrc))
     #echo(tile)
-    let resolution :float = 5121
+    # let resolution :float = 512
+    
     for layer in tile.layers:
         echo layer.name
         echo layer.keys
@@ -72,6 +77,9 @@ when isMainModule:
             # var coords = newSeq[int](0)
             var dx = int32(0)
             var dy = int32(0)
+
+            var path = newPath()
+
             while i != len(feature.geometry):
                 let geom = feature.geometry
                 let firstGeomByte = feature.geometry[i]
@@ -84,6 +92,7 @@ when isMainModule:
                 # echo "chci jet od " & $(i) & " do " & $(count + i)
                 if cmd == CMD_SEG_END:
                     echo "Close seg"
+                    closePath(path)
                 elif cmd == CMD_LINE_TO or cmd == CMD_MOVE_TO:
                     for point in 1 .. count:
 
@@ -108,5 +117,11 @@ when isMainModule:
                         echo "x = " & $(x) & " y=" & $(y)
                         # echo "raw x = " & $(rawx) & " y=" & $(rawy)
                         # coords.append([x, y])
-                
+                        if cmd == CMD_MOVE_TO:
+                            moveTo(path, float32(x), float32(y))
+                        else:
+                            lineTo(path, float32(x), float32(y))
+            strokePath(img, path, parseHtmlColor("#FC427B").rgba)
+
+    writeFile(img, "test.png")
     echo "Done"    
