@@ -19,6 +19,7 @@ I am far away from point 3, but I have some ideas:
 
 - original [lunarender](https://github.com/severak/lunarender)
 - 2018 [proof of concept](https://github.com/severak/lunatest) in Go
+- [mapstyles](https://github.com/severak/mapstyles) which will be ported to this version
 
 ## data & links
 
