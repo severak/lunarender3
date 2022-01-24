@@ -3,6 +3,8 @@ import zippy
 import nimpb/nimpb
 import vector_tile_pb
 
+import std/tables
+
 import pixie
 
 const CMD_MOVE_TO = 1
@@ -35,11 +37,31 @@ proc cmdToStr(cmd: uint32): string =
     else:
         "?"
 
+const debugLayerColor = {
+    "aerodrome_label": "gray",
+    "aeroway": "gray",
+    "boundary": "hotpink",
+    "building": "purple",
+    "housenumber": "purple",
+    "landcover": "green",
+    "landuse": "green",
+    "mountain_peak": "green",
+    "park": "green",
+    "place": "orange",
+    "poi": "orange",
+    "transportation": "brown",
+    "transportation_name": "brown",
+    "water": "blue",
+    "water_name": "blue",
+    "waterway": "blue"
+}.toTable
+
 when isMainModule:
     let img = newImage(4096, 4096)
+    fill(img, parseHtmlColor("#fff"))
 
     echo "OK"
-    let testFile = readFile("src/test.bin")
+    let testFile = readFile("src/test2.bin")
     # TODO - uncompress only when needed
     let tileSrc = uncompress(testFile)
     let tile = readvector_tile_Tile(newStringStream(tileSrc))
@@ -47,9 +69,11 @@ when isMainModule:
     # let resolution :float = 512
     
     for layer in tile.layers:
-        echo layer.name
-        echo layer.keys
+        echo "layer " & layer.name
+        # echo layer.keys
         # echo $(layer.values)
+        # echo "len" & $(len(layer.features))
+        if len(layer.features) == 0: continue
         for feature in layer.features:
             case feature.ftype:
                 of POINT: echo "(point)"
@@ -121,7 +145,7 @@ when isMainModule:
                             moveTo(path, float32(x), float32(y))
                         else:
                             lineTo(path, float32(x), float32(y))
-            strokePath(img, path, parseHtmlColor("#FC427B").rgba)
+            strokePath(img, path, parseHtmlColor(debugLayerColor[layer.name]), mat3(), 3)
 
     writeFile(img, "test.png")
     echo "Done"    
