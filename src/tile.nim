@@ -57,11 +57,13 @@ const debugLayerColor = {
 }.toTable
 
 when isMainModule:
-    let img = newImage(4096, 4096)
+    let imgSize = 512
+
+    let img = newImage(imgSize, imgSize)
     fill(img, parseHtmlColor("#fff"))
 
     echo "OK"
-    let testFile = readFile("src/test2.bin")
+    let testFile = readFile("src/testdata/lux-world.mvt")
     # TODO - uncompress only when needed
     let tileSrc = uncompress(testFile)
     let tile = readvector_tile_Tile(newStringStream(tileSrc))
@@ -113,6 +115,8 @@ when isMainModule:
 
                 i = i + 1
 
+                var faktor: float32 = float32(imgSize) / float32(layer.extent)
+
                 # echo "chci jet od " & $(i) & " do " & $(count + i)
                 if cmd == CMD_SEG_END:
                     echo "Close seg"
@@ -142,10 +146,10 @@ when isMainModule:
                         # echo "raw x = " & $(rawx) & " y=" & $(rawy)
                         # coords.append([x, y])
                         if cmd == CMD_MOVE_TO:
-                            moveTo(path, float32(x), float32(y))
+                            moveTo(path, float32(x) * faktor, float32(y) * faktor)
                         else:
-                            lineTo(path, float32(x), float32(y))
-            strokePath(img, path, parseHtmlColor(debugLayerColor[layer.name]), mat3(), 3)
+                            lineTo(path, float32(x) * faktor, float32(y) * faktor)
+            strokePath(img, path, parseHtmlColor(debugLayerColor[layer.name]), mat3(), 1.5)
 
     writeFile(img, "test.png")
     echo "Done"    
