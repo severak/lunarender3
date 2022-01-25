@@ -2,7 +2,9 @@
 
 experimental openstreetmap renderer - work in progress
 
-status: I can read PBF/MVT, now I need to understand what's inside.
+status: I can read PBF/MVT and make some debug images. Now I can need to implement proper styling.
+
+![Hello world!](examples/world1.png)
 
 ## idea
 
@@ -15,7 +17,7 @@ I am far away from point 3, but I have some ideas:
 - instead of JSON stylesheet use Lua (hence lunarender name)
 - make app capable working both as localhost server and backend for public map (behind some Nginx)
 
-## previous work
+## my previous work
 
 - original [lunarender](https://github.com/severak/lunarender)
 - 2018 [proof of concept](https://github.com/severak/lunatest) in Go
@@ -24,5 +26,6 @@ I am far away from point 3, but I have some ideas:
 ## data & links
 
 - [Vector tile specification](https://github.com/mapbox/vector-tile-spec) (as we are implementing our own parser)
-- [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luexembourg from OpenMapTiles)
+- [Vector tiles test suite](https://github.com/mapbox/mvt-fixtures)
 - [OpenMapTiles schema](https://openmaptiles.org/schema/)
+- current [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luxembourg from OpenMapTiles)
