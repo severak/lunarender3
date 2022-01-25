@@ -6,10 +6,23 @@ import vector_tile_pb
 import std/tables
 
 import pixie
+import vmath
 
 const CMD_MOVE_TO = 1
 const CMD_LINE_TO = 2
 const CMD_SEG_END = 7
+
+type
+    # Subpath* = ref seq[Vec2]
+
+    Feature* = object
+        layer*: string
+        tags*: Table[string, string]
+        geometry*: seq[seq[Vec2]]
+        # TODO - type of path to draw to make life easier
+    
+    Tile* = object 
+        features*: seq[Feature]
 
 proc `$`(tileValue: vector_tile_Tile_Value): string =
     if tileValue.hasstringValue:
@@ -27,6 +40,76 @@ proc `$`(tileValue: vector_tile_Tile_Value): string =
     else:
         return "?"
 
+proc uncompressWhenNeeded(data: string): Stream = 
+    try:
+        newStringStream(uncompress(data))
+    except ZippyError:
+        newStringStream(data)
+
+proc decodeTags(layer: vector_tile_Tile_Layer, featIn: vector_tile_Tile_Feature, featOut: var Feature) = 
+    var key = ""
+    var val = ""
+    featOut.tags = initTable[string, string]()
+    for tagOrd, tag in featIn.tags:
+        if tagOrd mod 2 == 0:
+            key = layer.keys[tag]
+        else:
+            val = $(layer.values[tag])
+            featOut.tags[key] = val
+
+proc transcodeGeometry(layer: vector_tile_Tile_Layer, featIn: vector_tile_Tile_Feature, featOut: var Feature) =
+    # ported from https://github.com/tilezen/mapbox-vector-tile/blob/master/mapbox_vector_tile/decoder.py
+    var i = 0
+    var dx = int32(0)
+    var dy = int32(0)
+    while i != len(featIn.geometry):
+        let geom = featIn.geometry
+        let firstGeomByte = featIn.geometry[i]
+        let cmd = firstGeomByte and 0x07
+        let count = int(firstGeomByte shr 3)
+
+        i = i + 1
+
+        if cmd == CMD_SEG_END:
+            # TODO - close paths, but how?
+            discard
+        elif cmd == CMD_LINE_TO or cmd == CMD_MOVE_TO:
+            var subpath = newSeq[Vec2]()
+            for point in 1 .. count:
+                var rawx = geom[i]
+                var x = zigzagDecode(geom[i])
+                i = i + 1
+
+                var rawy = geom[i]
+                var y = zigzagDecode(geom[i])
+                i = i + 1
+
+                x = x + dx
+                y = y + dy
+
+                dx = x
+                dy = y
+
+                var coord = Vec2()
+                coord.x = float32(x) / float32(layer.extent)
+                coord.y = float32(y) / float32(layer.extent)
+                subpath.add(coord)
+            featOut.geometry.add(subpath)
+
+proc decodeVectorTile(data: string): Tile =
+    var tileOut = Tile()
+    let tileIn = readvector_tile_Tile(uncompressWhenNeeded(data))
+    for layer in tileIn.layers:
+        if len(layer.features) > 0:
+            for featIn in layer.features:
+                var featOut = Feature()
+                featOut.layer = layer.name
+                decodeTags(layer, featIn, featOut)
+                transcodeGeometry(layer, featIn, featOut)
+                tileOut.features.add(featOut)
+    return tileOut
+
+
 proc cmdToStr(cmd: uint32): string =
     if cmd == CMD_LINE_TO:
         "line"
@@ -37,33 +120,52 @@ proc cmdToStr(cmd: uint32): string =
     else:
         "?"
 
-const debugLayerColor = {
-    "aerodrome_label": "gray",
-    "aeroway": "gray",
-    "boundary": "hotpink",
-    "building": "purple",
-    "housenumber": "purple",
-    "landcover": "green",
-    "landuse": "green",
-    "mountain_peak": "green",
-    "park": "green",
-    "place": "orange",
-    "poi": "orange",
-    "transportation": "brown",
-    "transportation_name": "brown",
-    "water": "blue",
-    "water_name": "blue",
-    "waterway": "blue"
-}.toTable
+proc testDecode(mvtName: string, destName: string): bool = 
+    const imgSize = 512
+    let img = newImage(imgSize, imgSize)
+    fill(img, "#fff".parseHtmlColor)
+    let tile = decodeVectorTile(readFile(mvtName))
+    for feat in tile.features:
+        for subpath in feat.geometry:
+            var path = newPath()
+            for ord, coord in subpath:
+                if ord == 0:
+                    path.moveTo(coord * imgSize)
+                else:
+                    path.lineTo(coord * imgSize)
+            closePath(path)
+            strokePath(img, path, "#ccc".parseHtmlColor, mat3(), 1)
+    writeFile(img, destName)
+    true
 
-when isMainModule:
+
+proc testAll() =
+    const debugLayerColor = {
+        "aerodrome_label": "gray",
+        "aeroway": "gray",
+        "boundary": "hotpink",
+        "building": "purple",
+        "housenumber": "purple",
+        "landcover": "green",
+        "landuse": "green",
+        "mountain_peak": "green",
+        "park": "green",
+        "place": "orange",
+        "poi": "orange",
+        "transportation": "brown",
+        "transportation_name": "brown",
+        "water": "blue",
+        "water_name": "blue",
+        "waterway": "blue"
+    }.toTable
+
     let imgSize = 512
 
     let img = newImage(imgSize, imgSize)
     fill(img, parseHtmlColor("#fff"))
 
     echo "OK"
-    let testFile = readFile("src/testdata/lux-world.mvt")
+    let testFile = readFile("src/testdata/lux-random2.mvt")
     # TODO - uncompress only when needed
     let tileSrc = uncompress(testFile)
     let tile = readvector_tile_Tile(newStringStream(tileSrc))
@@ -153,3 +255,7 @@ when isMainModule:
 
     writeFile(img, "test.png")
     echo "Done"    
+
+when isMainModule:
+    assert testDecode("src/testdata/lux-world.mvt", "world.png")
+    echo "OK"
