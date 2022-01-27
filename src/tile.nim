@@ -128,7 +128,7 @@ proc transcodeGeometry(layer: vector_tile_Tile_Layer, featIn: vector_tile_Tile_F
         featOut.geometry.add(subpath)
     featOut.geometry_type = featIn.ftype.toDrawType
 
-proc decodeVectorTile(data: string): Tile =
+proc decodeVectorTile*(data: string): Tile =
     var tileOut = Tile()
     let tileIn = readvector_tile_Tile(uncompressWhenNeeded(data))
     for layer in tileIn.layers:
@@ -141,7 +141,42 @@ proc decodeVectorTile(data: string): Tile =
                 tileOut.features.add(featOut)
     return tileOut
 
-proc testDecode(mvtName: string, destName: string): bool = 
+proc testDrawTile*(mvtData: string, imgSize: int): Image = 
+    const debugLayerColor = {
+        "aerodrome_label": "gray",
+        "aeroway": "gray",
+        "boundary": "hotpink",
+        "building": "purple",
+        "housenumber": "purple",
+        "landcover": "green",
+        "landuse": "green",
+        "mountain_peak": "green",
+        "park": "green",
+        "place": "orange",
+        "poi": "orange",
+        "transportation": "brown",
+        "transportation_name": "brown",
+        "water": "blue",
+        "water_name": "blue",
+        "waterway": "blue"
+    }.toTable
+
+    let img = newImage(imgSize, imgSize)
+    fill(img, "#000".parseHtmlColor)
+    let tile = decodeVectorTile(mvtData)
+    for feat in tile.features:
+        # echo feat.layer, " ", feat.tags
+        var path = newPath()
+        for subpath in feat.geometry:
+            for ord, coord in subpath:
+                if ord == 0:
+                    path.moveTo(coord * float32(imgSize))
+                else:
+                    path.lineTo(coord * float32(imgSize))
+            strokePath(img, path, parseHtmlColor(debugLayerColor[feat.layer]), mat3(), 1)
+    result = img
+
+proc testDecodeTile(mvtName: string, destName: string): bool = 
     const debugLayerColor = {
         "aerodrome_label": "gray",
         "aeroway": "gray",
@@ -179,5 +214,5 @@ proc testDecode(mvtName: string, destName: string): bool =
     true
 
 when isMainModule:
-    assert testDecode("src/testdata/lux-world.mvt", "world.png")
+    assert testDecodeTile("src/testdata/lux-world.mvt", "world.png")
     echo "OK"

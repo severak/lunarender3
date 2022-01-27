@@ -49,11 +49,19 @@
         code: 'u'
     });
 
+    var lr1 = L.tileLayer("http://localhost:5000/lr1/{z}/{x}/{y}/tile.png", {
+        minZoom: 1,
+        maxZoom: 14,
+        attribution: "debug",
+        code: 'u'
+    });
+
     L.control.layers({
         "Mapnik": osm,
         "OpenTopo Map": opentopomap,
         "Debug": debug,
         "Debug 512": debug512,
+        "Lunarender (debug)": lr1
     }, {}).addTo(map);
     </script>
   </body>
