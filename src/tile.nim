@@ -141,7 +141,7 @@ proc decodeVectorTile*(data: string): Tile =
                 tileOut.features.add(featOut)
     return tileOut
 
-proc testDrawTile*(mvtData: string, imgSize: int): Image = 
+proc testDrawTile*(tile: Tile, imgSize: int): Image = 
     const debugLayerColor = {
         "aerodrome_label": "gray",
         "aeroway": "gray",
@@ -163,7 +163,6 @@ proc testDrawTile*(mvtData: string, imgSize: int): Image =
 
     let img = newImage(imgSize, imgSize)
     fill(img, "#000".parseHtmlColor)
-    let tile = decodeVectorTile(mvtData)
     for feat in tile.features:
         # echo feat.layer, " ", feat.tags
         var path = newPath()

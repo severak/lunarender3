@@ -35,7 +35,8 @@ router myrouter:
     var mapdata = openTiles("2017-07-03_europe_luxembourg.mbtiles")
     var tile = mapdata.getTile(x, y, z)
     discard mapdata.closeTiles()
-    let image = testDrawTile(tile, 256)
+    var tileDecoded = decodeVectorTile(tile)
+    let image = testDrawTile(tileDecoded, 256)
     resp encodeImage(image, ffPng), "image/png"
   get "/lr1/@zoom/@x/@y/text.txt":
     var z = parseInt(@"zoom")
@@ -46,12 +47,23 @@ router myrouter:
     var vek = decodeVectorTile(tile)
     resp $(vek)
 
-proc server(data="") =
+proc server(data="test.mbtiles") =
+  ## starts tile-serving server
   var jester = initJester(myrouter)
   jester.serve()
 
-proc kek() =
-  echo "KEK"
+proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =
+  ## renders single tile
+  echo "opening database..."
+  var map = openTiles(data)
+  echo "getiing tile..."
+  var tile = getTile(map, z, x, y)
+  echo "decoding gile..."
+  var decoded = decodeVectorTile(tile)
+  echo "rendering it..."
+  var img = testDrawTile(decoded, 512)
+  writeFile(img, dest)
+  echo "Done."
 
 when isMainModule:
-  dispatchMulti([server], [kek])
+  dispatchMulti([server], [single])
