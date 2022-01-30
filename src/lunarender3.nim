@@ -31,7 +31,7 @@ router myrouter:
   get "/@tileset/@zoom/@x/@y/tile.png":
     var z = parseInt(@"zoom")
     var x = parseInt(@"x")
-    var y = parseInt(@"zoom")
+    var y = parseInt(@"y")
     var mapdata = openTiles("2017-07-03_europe_luxembourg.mbtiles")
     var tile = mapdata.getTile(x, y, z)
     discard mapdata.closeTiles()
@@ -41,7 +41,7 @@ router myrouter:
   get "/lr1/@zoom/@x/@y/text.txt":
     var z = parseInt(@"zoom")
     var x = parseInt(@"x")
-    var y = parseInt(@"zoom")
+    var y = parseInt(@"y")
     var mapdata = openTiles("2017-07-03_europe_luxembourg.mbtiles")
     var tile = mapdata.getTile(x, y, z)
     var vek = decodeVectorTile(tile)
@@ -54,11 +54,12 @@ proc server(data="test.mbtiles") =
 
 proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =
   ## renders single tile
+  echo "We gonna render tile ", z, ", ", x, ",", y, " now."
   echo "opening database..."
   var map = openTiles(data)
-  echo "getiing tile..."
+  echo "geting tile..."
   var tile = getTile(map, z, x, y)
-  echo "decoding gile..."
+  echo "decoding tile..."
   var decoded = decodeVectorTile(tile)
   echo "rendering it..."
   var img = testDrawTile(decoded, 512)

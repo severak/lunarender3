@@ -24,3 +24,10 @@ task genparser, "Generates MVT parser.":
 
 task testtile, "Test tile reading code.":
     exec "nim c -r src/tile.nim"
+
+task topfive, "Renders top five tiles to test if it works.":
+    exec "lunarender3 single -z=0 -x=0 -y=0 --dest=0.0.0.png"
+    exec "lunarender3 single -z=1 -x=0 -y=0 --dest=1.0.0.png"
+    exec "lunarender3 single -z=1 -x=0 -y=1 --dest=1.0.1.png"
+    exec "lunarender3 single -z=1 -x=1 -y=0 --dest=1.1.0.png"
+    exec "lunarender3 single -z=1 -x=1 -y=1 --dest=1.1.1.png"

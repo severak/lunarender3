@@ -138,6 +138,7 @@ proc decodeVectorTile*(data: string): Tile =
                 featOut.layer = layer.name
                 decodeTags(layer, featIn, featOut)
                 transcodeGeometry(layer, featIn, featOut)
+                # todo - if not possible to decode geometry, throw feature out of the window
                 tileOut.features.add(featOut)
     return tileOut
 
@@ -165,14 +166,19 @@ proc testDrawTile*(tile: Tile, imgSize: int): Image =
     fill(img, "#000".parseHtmlColor)
     for feat in tile.features:
         # echo feat.layer, " ", feat.tags
-        var path = newPath()
-        for subpath in feat.geometry:
-            for ord, coord in subpath:
-                if ord == 0:
-                    path.moveTo(coord * float32(imgSize))
-                else:
-                    path.lineTo(coord * float32(imgSize))
-            strokePath(img, path, parseHtmlColor(debugLayerColor[feat.layer]), mat3(), 1)
+        if len(feat.geometry) > 0:
+            var path = newPath()
+            for subpath in feat.geometry:
+                for ord, coord in subpath:
+                    if ord == 0:
+                        path.moveTo(coord * float32(imgSize))
+                    else:
+                        path.lineTo(coord * float32(imgSize))
+            try:
+                strokePath(img, path, parseHtmlColor(debugLayerColor[feat.layer]), mat3(), 1)
+            except IndexDefect:
+                # echo feat
+                discard
     result = img
 
 proc testDecodeTile(mvtName: string, destName: string): bool = 
