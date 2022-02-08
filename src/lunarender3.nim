@@ -59,7 +59,7 @@ proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =
   echo "opening database..."
   var map = openTiles(data)
   echo "geting tile..."
-  var tile = getTile(map, z, x, y)
+  var tile = getTile(map, x, y, z)
   echo "decoding tile..."
   var decoded = decodeVectorTile(tile)
   echo "rendering it..."

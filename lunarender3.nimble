@@ -35,3 +35,6 @@ task topfive, "Renders top five tiles to test if it works.":
 
 task benchpress, "Compile and run benchmark.":
     exec "nim c -r -d:release src/lunarender3.nim benchmark"
+
+task debugserver, "Compile and run server.":
+    exec "nim c -r -d:release src/lunarender3.nim serve"
