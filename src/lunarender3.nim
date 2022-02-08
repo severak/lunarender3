@@ -4,6 +4,7 @@ import cligen
 import mbtiles
 import tile
 import strutils
+import benchy
 
 router myrouter:
   get "/":
@@ -66,5 +67,26 @@ proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =
   writeFile(img, dest)
   echo "Done."
 
+proc benchmark(data="test.mbtiles", z=0, x=0, y=0) =
+  ## run some benchmarks
+  echo "Benchmarking..."
+  timeIt "opening tileset":
+    let benchMap = openTiles(data)
+    discard closeTiles(benchMap)
+    keep(benchMap)
+  let map = openTiles(data)
+  timeIt "getting tile from set":
+    let tileBench = getTile(map, z, x, y)
+    keep(tileBench)
+  let tile = getTile(map, z, x, y)
+  timeIt "decoding tile":
+    let decodedBench = decodeVectorTile(tile)
+    keep(decodedBench)
+  let decoded = decodeVectorTile(tile)
+  timeIt "draw test image":
+    let imgBench = testDrawTile(decoded, 256);
+    keep(imgBench)
+  echo "Done."
+
 when isMainModule:
-  dispatchMulti([server], [single])
+  dispatchMulti([server], [single], [benchmark])
