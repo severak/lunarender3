@@ -55,12 +55,22 @@
         code: 'u'
     });
 
+    var lr2 = L.tileLayer("http://localhost:5000/lr1/{z}/{x}/{-y}/tile512.png", {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        maxZoom: 15,
+        attribution: "debug 512",
+        code: 'u'
+    });
+
     L.control.layers({
         "Mapnik": osm,
         "OpenTopo Map": opentopomap,
         "Debug": debug,
         "Debug 512": debug512,
-        "Lunarender (built-in style)": lr1
+        "Lunarender (built-in style)": lr1,
+        "Lunarender (built-in style) / big": lr2
     }, {}).addTo(map);
 
     var ZoomViewer = L.Control.extend({
