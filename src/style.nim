@@ -19,6 +19,9 @@ type
         font*: Font
         fontSize*: int
         fontHalo*: Color
+        label*: string
+        fallback*: string
+        # TODO - centering text
 
     StyleRules* = object
         background*: Color
@@ -50,14 +53,18 @@ proc drawFeat(img: Image, feat: Feature, rule: StyleRule, imgSize: int) =
             # some broken path - probably maritime border
             discard
     if rule.kind==srText and feat.geometryType==FeatDrawType.dtPoint:
-        if feat.tags.hasKey("name"):
-            # TODO - enable to draw custom tag
+        var toShow = "name"
+        if rule.label != "":
+            toShow = rule.label
+            if rule.fallback != "" and not feat.tags.hasKey(rule.label) and feat.tags.hasKey(rule.fallback):
+                toShow = rule.fallback
+        if feat.tags.hasKey(toShow):
             if not isNil(rule.fontHalo):
                 rule.font.paint = parseSomePaint(rule.fontHalo)
                 # have fontHaloSize or something similar
-                strokeText(img, rule.font, feat.tags["name"], translate(feat.geometry[0][0] * float32(imgSize)), 3)
+                strokeText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)), 3)
             rule.font.paint = parseSomePaint(rule.color)
-            fillText(img, rule.font, feat.tags["name"], translate(feat.geometry[0][0] * float32(imgSize)))
+            fillText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)))
 
 proc drawTile*(tile: Tile, ruleset: StyleRules, imgSize: int, zoom: int): Image =
     let img = newImage(imgSize, imgSize)
@@ -120,7 +127,9 @@ proc makeExampleRuleset*(): StyleRules =
     style.rules.add(StyleRule(color: admin, width: 1, minzoom: 0, maxzoom: 14, layer: "boundary", kind: srLine))
 
     # place
-    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 0, maxzoom: 14, layer: "place", font: gidole, kind: srText))
+    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 0, maxzoom: 14, layer: "place", font: gidole, kind: srText, label: "name:latin", fallback:"name"))
+
+    # TODO - separate places names by zoom
 
     result = style
 
