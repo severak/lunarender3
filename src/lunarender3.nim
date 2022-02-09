@@ -43,6 +43,15 @@ proc server(data="test.mbtiles") =
       var rules = makeExampleRuleset()
       var image = drawTile(tileDecoded, rules, 256, z)
       resp encodeImage(image, ffPng), "image/png"
+    get "/@tileset/@zoom/@x/@y/tile512.png":
+      var z = parseInt(@"zoom")
+      var x = parseInt(@"x")
+      var y = parseInt(@"y")
+      var tile = mapdata.getTile(x, y, z)
+      var tileDecoded = decodeVectorTile(tile)
+      var rules = makeExampleRuleset()
+      var image = drawTile(tileDecoded, rules, 512, z)
+      resp encodeImage(image, ffPng), "image/png"
     get "/lr1/@zoom/@x/@y/text.txt":
       var z = parseInt(@"zoom")
       var x = parseInt(@"x")
@@ -89,6 +98,9 @@ proc benchmark(data="test.mbtiles", z=0, x=0, y=0) =
   timeIt "draw test image":
     let imgBench = testDrawTile(decoded, 256);
     keep(imgBench)
+  let rules = makeExampleRuleset()
+  timeIt "draw tile using rules":
+    let imgBench = drawTile(decoded, rules, 256, z)
   echo "Done."
 
 when isMainModule:

@@ -22,7 +22,7 @@ status: I can read PBF/MVT and make some debug images using styles hardcoded in 
 ## idea
 
 1. use [tilemaker](https://github.com/systemed/tilemaker) to make vector tiles
-2. use this (*lunarender3*) tool to render map
+2. use this tool (*lunarender3*) to render map
 3. profit! (or at least have map with nice colors)
 
 I am far away from point 3, but I have some ideas:
@@ -48,4 +48,8 @@ I am far away from point 3, but I have some ideas:
 
 - unreverse reversed y coordinate
 - handle missing tiles gracefully
-- bind other interfaces to be able to 
+- handle broken tiles gracefully
+- bind other interfaces to be able to host demo on server
+- derive zoom levels above 14 from zoom 14
+- be able to write rules in lua
+- optimize a lot
