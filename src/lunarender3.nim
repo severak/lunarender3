@@ -5,6 +5,7 @@ import mbtiles
 import tile
 import strutils
 import benchy
+import style
 
 proc server(data="test.mbtiles") =
   ## starts tile-serving server
@@ -39,7 +40,8 @@ proc server(data="test.mbtiles") =
       var y = parseInt(@"y")
       var tile = mapdata.getTile(x, y, z)
       var tileDecoded = decodeVectorTile(tile)
-      let image = testDrawTile(tileDecoded, 256)
+      var rules = makeExampleRuleset()
+      var image = drawTile(tileDecoded, rules, 256, z)
       resp encodeImage(image, ffPng), "image/png"
     get "/lr1/@zoom/@x/@y/text.txt":
       var z = parseInt(@"zoom")
@@ -62,7 +64,9 @@ proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =
   echo "decoding tile..."
   var decoded = decodeVectorTile(tile)
   echo "rendering it..."
-  var img = testDrawTile(decoded, 512)
+  # var img = testDrawTile(decoded, 512)
+  var rules = makeExampleRuleset()
+  var img = drawTile(decoded, rules, 512, z)
   writeFile(img, dest)
   echo "Done."
 

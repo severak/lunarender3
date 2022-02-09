@@ -2,7 +2,7 @@
 
 experimental openstreetmap renderer - work in progress
 
-status: I can read PBF/MVT and make some debug images. Now I can need to implement proper styling.
+status: I can read PBF/MVT and make some debug images using styles hardcoded in Nim.
 
 ![Hello world!](examples/world1.png)
 
@@ -29,3 +29,4 @@ I am far away from point 3, but I have some ideas:
 - [Vector tiles test suite](https://github.com/mapbox/mvt-fixtures)
 - [OpenMapTiles schema](https://openmaptiles.org/schema/)
 - current [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luxembourg from OpenMapTiles)
+- [MAKI icons](https://labs.mapbox.com/maki-icons/)

@@ -13,19 +13,19 @@ const CMD_LINE_TO = 2
 const CMD_SEG_END = 7
 
 type
-    DrawType = enum
+    FeatDrawType* = enum
         dtUnknown = 0, dtPoint = 1, dtLine = 2, dtPolygon = 3
 
     Feature* = object
         layer*: string
         tags*: Table[string, string]
         geometry*: seq[seq[Vec2]]
-        geometry_type: DrawType
+        geometryType*: FeatDrawType
     
     Tile* = object 
         features*: seq[Feature]
 
-proc toDrawType*(ftype: vector_tile_Tile_GeomType): DrawType =
+proc toDrawType*(ftype: vector_tile_Tile_GeomType): FeatDrawType =
     case ftype:
         of UNKNOWN: 
             result = dtUnknown
