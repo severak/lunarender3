@@ -60,8 +60,23 @@
         "OpenTopo Map": opentopomap,
         "Debug": debug,
         "Debug 512": debug512,
-        "Lunarender (debug)": lr1
+        "Lunarender (built-in style)": lr1
     }, {}).addTo(map);
+
+    var ZoomViewer = L.Control.extend({
+		onAdd: function () {
+			var gauge = L.DomUtil.create('div');
+			gauge.style.width = '200px';
+			gauge.style.background = 'rgba(255,255,255,0.5)';
+			gauge.style.textAlign = 'left';
+			map.on('zoomstart zoom zoomend', function (ev) {
+				gauge.innerHTML = 'Zoom level: ' + map.getZoom();
+			});
+			return gauge;
+		}
+	});
+
+	var zoomViewer = (new ZoomViewer()).addTo(map);
     </script>
   </body>
 </html>
