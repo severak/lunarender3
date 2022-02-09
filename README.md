@@ -6,6 +6,19 @@ status: I can read PBF/MVT and make some debug images using styles hardcoded in 
 
 ![Hello world!](examples/world1.png)
 
+<details>
+  <summary>More nice pictures</summary>
+
+![Hello world no 2!](examples/world2.png)
+
+![Kleinbettingen](examples/kleinbettingen.png)
+
+![Beroun](examples/beroun.png)
+
+![Beroun](examples/beroun-big.png)
+
+</details>
+
 ## idea
 
 1. use [tilemaker](https://github.com/systemed/tilemaker) to make vector tiles
@@ -30,3 +43,9 @@ I am far away from point 3, but I have some ideas:
 - [OpenMapTiles schema](https://openmaptiles.org/schema/)
 - current [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luxembourg from OpenMapTiles)
 - [MAKI icons](https://labs.mapbox.com/maki-icons/)
+
+## TODO
+
+- unreverse reversed y coordinate
+- handle missing tiles gracefully
+- bind other interfaces to be able to 
