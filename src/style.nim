@@ -1,6 +1,7 @@
 import tile 
 import pixie
 import std/tables
+import sugar
 
 type 
     StringsTable = Table[string, string]
@@ -51,6 +52,7 @@ proc drawFeat(img: Image, feat: Feature, rule: StyleRule, imgSize: int) =
                 fillPath(img, path, rule.color)
         except IndexDefect:
             # some broken path - probably maritime border
+            # TODO - fix this
             discard
     if rule.kind==srText and feat.geometryType==FeatDrawType.dtPoint:
         var toShow = "name"
@@ -59,12 +61,19 @@ proc drawFeat(img: Image, feat: Feature, rule: StyleRule, imgSize: int) =
             if rule.fallback != "" and not feat.tags.hasKey(rule.label) and feat.tags.hasKey(rule.fallback):
                 toShow = rule.fallback
         if feat.tags.hasKey(toShow):
-            if not isNil(rule.fontHalo):
-                rule.font.paint = parseSomePaint(rule.fontHalo)
-                # have fontHaloSize or something similar
-                strokeText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)), 3)
-            rule.font.paint = parseSomePaint(rule.color)
-            fillText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)))
+            try:
+                if not isNil(rule.fontHalo):
+                    rule.font.paint = parseSomePaint(rule.fontHalo)
+                    # echo $(rule.font.paint)
+                    # have fontHaloSize or something similar
+                    strokeText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)), 3)
+                rule.font.paint = parseSomePaint(rule.color)
+                fillText(img, rule.font, feat.tags[toShow], translate(feat.geometry[0][0] * float32(imgSize)))
+            except IndexDefect:
+                # some crap - bad data, broken font or something like that
+                # TODO - fix this
+                discard
+            
 
 proc drawTile*(tile: Tile, ruleset: StyleRules, imgSize: int, zoom: int): Image =
     let img = newImage(imgSize, imgSize)
@@ -98,7 +107,7 @@ proc makeExampleRuleset*(): StyleRules =
     style.background = background
 
     proc isWood(tags: StringsTable): bool =
-        tags.hasKey("class") and tags["class"] != "wood"
+        tags.hasKey("class") and tags["class"] == "wood"
 
     # woods
     style.rules.add(StyleRule(color: wood, width: 1, minzoom: 0, maxzoom: 14, layer: "landcover", kind: srArea, what: isWood))
@@ -123,13 +132,18 @@ proc makeExampleRuleset*(): StyleRules =
     # rail
     style.rules.add(StyleRule(color: rail, width: 1, minzoom: 0, maxzoom: 14, layer: "transportation", kind: srLine, what: isRailway))
 
+    style.rules.add(StyleRule(color: "red".parseHtmlColor, width: 1, minzoom: 0, maxzoom: 14, layer: "transportation", kind: srLine, what: (tags) => tags.hasKey("class") and tags["class"]=="tram"))
+
     # boundaries
     style.rules.add(StyleRule(color: admin, width: 1, minzoom: 0, maxzoom: 14, layer: "boundary", kind: srLine))
 
     # place
-    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 0, maxzoom: 14, layer: "place", font: gidole, kind: srText, label: "name:latin", fallback:"name"))
-
-    # TODO - separate places names by zoom
+    # continents
+    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 0, maxzoom: 2, layer: "place", font: gidole, kind: srText, label: "name:latin", fallback:"name", what: (tags) => tags.hasKey("class") and tags["class"]=="continent"))
+    # countries
+    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 3, maxzoom: 5, layer: "place", font: gidole, kind: srText, label: "name:latin", fallback:"name", what: (tags) => tags.hasKey("class") and tags["class"]=="country"))
+    # everything else
+    style.rules.add(StyleRule(color: black, fontHalo: background, width: 1, minzoom: 6, maxzoom: 14, layer: "place", font: gidole, kind: srText, label: "name:latin", fallback:"name"))
 
     result = style
 
