@@ -21,7 +21,7 @@ status: I can read PBF/MVT and make some debug images using styles hardcoded in 
 
 ## idea
 
-1. use [tilemaker](https://github.com/systemed/tilemaker) to make vector tiles
+1. use [tilemaker](https://github.com/systemed/tilemaker) (or [planetiler](https://github.com/onthegomap/planetiler)) to make vector tiles
 2. use this tool (*lunarender3*) to render map
 3. profit! (or at least have map with nice colors)
 
@@ -44,12 +44,18 @@ I am far away from point 3, but I have some ideas:
 - current [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luxembourg from OpenMapTiles)
 - [MAKI icons](https://labs.mapbox.com/maki-icons/)
 
-## TODO
+## TODOs & ideas 
 
+- be able to write rules in lua
 - unreverse reversed y coordinate
 - handle missing tiles gracefully
 - handle broken tiles gracefully
 - bind other interfaces to be able to host demo on server
+- host pbf content for javascript clients
+- cache results
+- mark occupied areas to not collide text labels and icons
+- draw text labels from neighbor tiles to not crop labels crossing tile borders
+- make "average lines" from paths to put street names on
 - derive zoom levels above 14 from zoom 14
-- be able to write rules in lua
 - optimize a lot
+- translate lua rules via [fengari](https://github.com/fengari-lua/fengari) for use in [Leaflet.VectorGrid](https://github.com/Leaflet/Leaflet.VectorGrid)
