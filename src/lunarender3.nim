@@ -6,6 +6,7 @@ import tile
 import strutils
 import benchy
 import style
+import zippy
 
 proc server(data="test.mbtiles") =
   ## starts tile-serving server
@@ -59,6 +60,17 @@ proc server(data="test.mbtiles") =
       var tile = mapdata.getTile(x, y, z)
       var vek = decodeVectorTile(tile)
       resp $(vek)
+    get "/tiles/@zoom/@x/@y/tile.pbf":
+      var z = parseInt(@"zoom")
+      var x = parseInt(@"x")
+      var y = parseInt(@"y")
+      let ymax = 2 ^ z
+      var tile = mapdata.getTile(x, ymax-y, z)
+      echo "ymax = ", ymax
+      echo "kek ", x, ",",  (ymax-y), ",",  z
+      if tile == "":
+        resp Http404
+      resp uncompress(tile), "application/vnd.mapbox-vector-tile"
 
   var jester = initJester(myrouter)
   jester.serve()
