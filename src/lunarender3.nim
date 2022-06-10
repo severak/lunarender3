@@ -7,8 +7,9 @@ import strutils
 import benchy
 import style
 import zippy
+import os
 
-proc server(data="test.mbtiles") =
+proc server(data="test.mbtiles", port=5000, cache="") =
   ## starts tile-serving server
   var mapdata = openTiles(data)
 
@@ -40,18 +41,28 @@ proc server(data="test.mbtiles") =
       var x = parseInt(@"x")
       var y = parseInt(@"y")
       var tile = mapdata.getTile(x, y, z)
+      if tile == "":
+        resp Http404
       var tileDecoded = decodeVectorTile(tile)
       var rules = makeExampleRuleset()
       var image = drawTile(tileDecoded, rules, 256, z)
+      if cache != "":
+        createDir(cache & "/" & @"tileset" & "/" & @"zoom" & "/" & @"x" & "/" & @"y")
+        image.writeFile(cache & "/" & @"tileset" & "/" & @"zoom" & "/" & @"x" & "/" & @"y" & "/tile.png")
       resp encodeImage(image, ffPng), "image/png"
     get "/@tileset/@zoom/@x/@y/tile512.png":
       var z = parseInt(@"zoom")
       var x = parseInt(@"x")
       var y = parseInt(@"y")
       var tile = mapdata.getTile(x, y, z)
+      if tile == "":
+        resp Http404
       var tileDecoded = decodeVectorTile(tile)
       var rules = makeExampleRuleset()
       var image = drawTile(tileDecoded, rules, 512, z)
+      if cache != "":
+        createDir(cache & "/" & @"tileset" & "/" & @"zoom" & "/" & @"x" & "/" & @"y")
+        image.writeFile(cache & "/" & @"tileset" & "/" & @"zoom" & "/" & @"x" & "/" & @"y" & "/tile512.png")
       resp encodeImage(image, ffPng), "image/png"
     get "/lr1/@zoom/@x/@y/text.txt":
       var z = parseInt(@"zoom")
@@ -72,7 +83,8 @@ proc server(data="test.mbtiles") =
         resp Http404
       resp uncompress(tile), "application/vnd.mapbox-vector-tile"
 
-  var jester = initJester(myrouter)
+  var mysettings = newSettings(Port(port))
+  var jester = initJester(myrouter, mysettings)
   jester.serve()
 
 proc single(data="test.mbtiles", z=0, x=0, y=0, dest="test.png") =

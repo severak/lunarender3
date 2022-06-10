@@ -1,0 +1,18 @@
+localhost {
+
+	handle / {
+		respond "There goes map homepage..."
+	}
+	
+	route {
+    	file_server {
+			# first look for tiles in cache directory
+			root "./cache/"
+      		# pass it to reverse proxy when tile not exists
+      		pass_thru 
+    	}
+    
+    	reverse_proxy localhost:5000
+		# lunarender saves tiles to cache directory when they are generated
+	}
+}
