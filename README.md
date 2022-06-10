@@ -43,9 +43,11 @@ I am far away from point 3, but I have some ideas:
 - [OpenMapTiles schema](https://openmaptiles.org/schema/)
 - current [test data](https://data.maptiler.com/downloads/europe/luxembourg/) (Luxembourg from OpenMapTiles)
 - [MAKI icons](https://labs.mapbox.com/maki-icons/)
+- https://www.axismaps.com/guide
 
 ## TODOs & ideas 
 
+- https://github.com/mlevans/leaflet-hash and planetilers like tiles inspector
 - be able to write rules in lua
 - unreverse reversed y coordinate
 - handle missing tiles gracefully
@@ -59,3 +61,5 @@ I am far away from point 3, but I have some ideas:
 - derive zoom levels above 14 from zoom 14
 - optimize a lot
 - translate lua rules via [fengari](https://github.com/fengari-lua/fengari) for use in [Leaflet.VectorGrid](https://github.com/Leaflet/Leaflet.VectorGrid)
+- https://docs.microsoft.com/en-us/bingmaps/articles/bing-maps-tile-system
+- https://github.com/paulmach/orb/blob/master/maptile/tile.go
