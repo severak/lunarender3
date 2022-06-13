@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "packages": {
+    "vmath": {
+      "version": "1.1.4",
+      "vcsRevision": "1110b97fac745feb458aa44164e8456e2777c16d",
+      "url": "https://github.com/treeform/vmath",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "b85225e9f4e399401c22b1d0eae18c93482e084c"
+      }
+    },
+    "bumpy": {
+      "version": "1.1.1",
+      "vcsRevision": "2801fcff08996f3eb79ddfe8ebcb6e0ff8c19d19",
+      "url": "https://github.com/treeform/bumpy",
+      "downloadMethod": "git",
+      "dependencies": [
+        "vmath"
+      ],
+      "checksums": {
+        "sha1": "1239ab6d12e2ab99e5012ea3981ae52abd49e9a6"
+      }
+    },
+    "asynctools": {
+      "version": "0.1.1",
+      "vcsRevision": "a314fb8d18a08954fc7ea43e40673acb348ce7cc",
+      "url": "https://github.com/timotheecour/asynctools",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "5e7df4178ee5c148532ff8c44a22015d576624d8"
+      }
+    },
+    "benchy": {
+      "version": "0.0.1",
+      "vcsRevision": "cc7691ae6dfcd7e9e2d8b53bfa9f9742b764b78a",
+      "url": "https://github.com/treeform/benchy",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "b1a3050e1a0b6f3168c12ef5af05aef679a46ff6"
+      }
+    },
+    "zippy": {
+      "version": "0.10.0",
+      "vcsRevision": "15cb7c970c9cb520247792ec4060e582915381aa",
+      "url": "https://github.com/guzba/zippy",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "9f7d593f9418e63c7916424afc67da85747193cd"
+      }
+    },
+    "chroma": {
+      "version": "0.2.5",
+      "vcsRevision": "640f26142f47fea023a87bfd684a3fa770a785ae",
+      "url": "https://github.com/treeform/chroma",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "d3f5044e0441ad8918ed2d4cbc3de3986f94172d"
+      }
+    },
+    "nimsimd": {
+      "version": "1.1.0",
+      "vcsRevision": "aa6d2e6753cf3ed63d2344614610180550fc29da",
+      "url": "https://github.com/guzba/nimsimd",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "c79fe52f7672eedefe846369dc2057207585b230"
+      }
+    },
+    "nimpb_protoc": {
+      "version": "0.1.0",
+      "vcsRevision": "4a54eff46b816e7d2f1d69df24cc85780406e2f3",
+      "url": "https://github.com/oswjk/nimpb_protoc",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "64e989e5ca0a7ce47517a72fa83694899c9b5231"
+      }
+    },
+    "nimpb": {
+      "version": "0.2.0",
+      "vcsRevision": "67e38c9fb76e45423078f8cfc89df743b0518367",
+      "url": "https://github.com/oswjk/nimpb",
+      "downloadMethod": "git",
+      "dependencies": [
+        "nimpb_protoc"
+      ],
+      "checksums": {
+        "sha1": "03a9547d5e63b12c71168e7ea1e4b0aaf34bb558"
+      }
+    },
+    "flatty": {
+      "version": "0.3.4",
+      "vcsRevision": "07f6ba8ab96238e5bd1264cf0cea1d1746abb00c",
+      "url": "https://github.com/treeform/flatty",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "5775e6ea6ca339efc5bd37b082b8294342d49dc5"
+      }
+    },
+    "pixie": {
+      "version": "4.3.0",
+      "vcsRevision": "ab63f2e2e3c369e3d88019fdcefe6a6454ddbc14",
+      "url": "https://github.com/treeform/pixie",
+      "downloadMethod": "git",
+      "dependencies": [
+        "vmath",
+        "chroma",
+        "zippy",
+        "flatty",
+        "nimsimd",
+        "bumpy"
+      ],
+      "checksums": {
+        "sha1": "365934e3f9dfe8ff1adf04ef678f70b2a29a94db"
+      }
+    },
+    "cligen": {
+      "version": "1.5.24",
+      "vcsRevision": "a276fa26fd352816f2ff807591540b27c5247c4a",
+      "url": "https://github.com/c-blake/cligen.git",
+      "downloadMethod": "git",
+      "dependencies": [],
+      "checksums": {
+        "sha1": "005aece11c79fb4df0e7f35cf7c82c7432653b1b"
+      }
+    },
+    "jester": {
+      "version": "0.5.0",
+      "vcsRevision": "a21b36a02b7745d6cdcda32d4ab3fba328cda17a",
+      "url": "https://github.com/dom96/jester/",
+      "downloadMethod": "git",
+      "dependencies": [
+        "asynctools"
+      ],
+      "checksums": {
+        "sha1": "a192ca25bfc05d5de5c9a5fafca3b0cee47d82d2"
+      }
+    }
+  }
+}

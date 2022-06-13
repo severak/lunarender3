@@ -9,6 +9,8 @@ import style
 import zippy
 import os
 
+let ffPng = PngFormat  # pixie probably renamed this
+
 proc server(data="test.mbtiles", port=5000, cache="") =
   ## starts tile-serving server
   var mapdata = openTiles(data)

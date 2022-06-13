@@ -13,7 +13,7 @@ type
         UNKNOWN = 0
         POINT = 1
         LINESTRING = 2
-        POLYGON = 3
+        POLYGONS = 3
     vector_tile_Tile* = ref vector_tile_TileObj
     vector_tile_TileObj* = object of Message
         layers: seq[vector_tile_Tile_Layer]
