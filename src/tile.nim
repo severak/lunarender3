@@ -33,7 +33,7 @@ proc toDrawType*(ftype: vector_tile_Tile_GeomType): FeatDrawType =
             result = dtPoint
         of LINESTRING: 
             result = dtLine
-        of POLYGON: 
+        of POLYGONS: 
             result = dtPolygon 
 
 proc `$`(tileValue: vector_tile_Tile_Value): string =
