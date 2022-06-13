@@ -1,3 +1,7 @@
+## All the logic for rendering and style definition.
+## 
+## TODO - lua parsing here
+
 import tile 
 import pixie
 import std/tables

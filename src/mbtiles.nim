@@ -1,3 +1,7 @@
+## Logic for opening MBTiles file.
+##
+## TODO - metadata extraction here.
+
 import std/db_sqlite
 
 proc openTiles*(fileName: string): DbConn =

@@ -34,13 +34,13 @@
         code: 'u'
     });
 
-    var debug = L.tileLayer("http://localhost:5000/debug/{z}/{x}/{y}/debug.png", {
+    var debug = L.tileLayer("/debug/{z}/{x}/{y}/debug.png", {
         maxZoom: 14,
         attribution: "debug",
         code: 'u'
     });
 
-    var debug512 = L.tileLayer("http://localhost:5000/debug512/{z}/{x}/{y}/debug512.png", {
+    var debug512 = L.tileLayer("/debug512/{z}/{x}/{y}/debug512.png", {
         tileSize: 512,
         zoomOffset: -1,
         minZoom: 1,
@@ -49,14 +49,14 @@
         code: 'u'
     });
 
-    var lr1 = L.tileLayer("http://localhost:5000/lr1/{z}/{x}/{-y}/tile.png", {
+    var lr1 = L.tileLayer("/lr1/{z}/{x}/{-y}/tile.png", {
         minZoom: 1,
         maxZoom: 14,
         attribution: "debug",
         code: 'u'
     });
 
-    var lr2 = L.tileLayer("http://localhost:5000/lr1/{z}/{x}/{-y}/tile512.png", {
+    var lr2 = L.tileLayer("/lr1/{z}/{x}/{-y}/tile512.png", {
         tileSize: 512,
         zoomOffset: -1,
         minZoom: 1,

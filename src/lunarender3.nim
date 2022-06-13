@@ -11,7 +11,7 @@ import os
 
 let ffPng = PngFormat  # pixie probably renamed this
 
-proc server(data="test.mbtiles", port=5000, cache="") =
+proc server(data="test.mbtiles", host="", port=5000, cache="") =
   ## starts tile-serving server
   var mapdata = openTiles(data)
 
@@ -85,7 +85,7 @@ proc server(data="test.mbtiles", port=5000, cache="") =
         resp Http404
       resp uncompress(tile), "application/vnd.mapbox-vector-tile"
 
-  var mysettings = newSettings(Port(port))
+  var mysettings = newSettings(Port(port), bindAddr=host)
   var jester = initJester(myrouter, mysettings)
   jester.serve()
 

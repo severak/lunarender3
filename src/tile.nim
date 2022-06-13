@@ -1,3 +1,8 @@
+## This file handles decoding of vector tiles to intermediate internal format.
+## 
+## TODO - mvt test suite here
+## TODO - merge neighboring tiles here (if desired)
+
 import streams
 import zippy
 import nimpb/nimpb

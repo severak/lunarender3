@@ -48,19 +48,17 @@ I am far away from point 3, but I have some ideas:
 ## TODOs & ideas 
 
 - on linux it needs to be build with `-d:useStdLib` because of httpbeast not included or something like this
-- https://github.com/mlevans/leaflet-hash and planetilers like tiles inspector
 - be able to write rules in lua
 - unreverse reversed y coordinate
-- handle missing tiles gracefully
 - handle broken tiles gracefully
 - bind other interfaces to be able to host demo on server
 - host pbf content for javascript clients
-- cache results
 - mark occupied areas to not collide text labels and icons
-- draw text labels from neighbor tiles to not crop labels crossing tile borders
+- draw text labels from neighbor tiles to not crop labels crossing tile borders (not needed on all sources)
 - make "average lines" from paths to put street names on
 - derive zoom levels above 14 from zoom 14
 - optimize a lot
 - translate lua rules via [fengari](https://github.com/fengari-lua/fengari) for use in [Leaflet.VectorGrid](https://github.com/Leaflet/Leaflet.VectorGrid)
 - https://docs.microsoft.com/en-us/bingmaps/articles/bing-maps-tile-system
 - https://github.com/paulmach/orb/blob/master/maptile/tile.go
+- document each tile source quirks
