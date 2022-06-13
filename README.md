@@ -4,12 +4,14 @@ experimental openstreetmap renderer - work in progress
 
 status: I can read PBF/MVT and make some debug images using styles hardcoded in Nim.
 
-![Hello world!](examples/world1.png)
+![Hello world!](examples/world2.png)
+
+see [demo server](https://lunarender.svita.cz/)
 
 <details>
   <summary>More nice pictures</summary>
 
-![Hello world no 2!](examples/world2.png)
+![Hello world no 2!](examples/world1.png)
 
 ![Kleinbettingen](examples/kleinbettingen.png)
 
