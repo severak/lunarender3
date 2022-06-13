@@ -47,6 +47,7 @@ I am far away from point 3, but I have some ideas:
 
 ## TODOs & ideas 
 
+- on linux it needs to be build with `-d:useStdLib` because of httpbeast not included or something like this
 - https://github.com/mlevans/leaflet-hash and planetilers like tiles inspector
 - be able to write rules in lua
 - unreverse reversed y coordinate
