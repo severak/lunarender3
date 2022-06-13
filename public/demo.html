@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+      <title>Lunarender demo server</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+    <script src="leaflet-hash.js"></script>
+    <style>
+      body {  font-family: sans-serif; }  
+      .container { max-width: 80em; margin: auto; }
+      #map { width: 100%; height: 60vh;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    <h1>Lunarender demo server</h1>
+    <div id="map">
+    </div>
+    <p>Lunarender is not finished yet. Please follow our <a href="https://github.com/severak/lunarender3">github project</a> for updates.</p>
+    <p>Once we got usable version, it will be published on this page alongside with documentation and links to the data sources.</p>
+    </div>
+    <script>
+    var map = L.map('map').setView([50.0728, 14.4656], 11);
+
+    var osmAttr = '&copy; <a href="https://openstreetmap.org/copyright">Přispěvatelé OpenStreetMap</a>'; //abbrevation not recommended on other websites
+    
+    var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: osmAttr + ', CC-BY-SA 2.0',
+        code: 'd',
+        basic: true,
+        osmczDefaultLayer: true,
+    });
+
+    var opentopomap = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+        maxZoom: 17,
+        attribution: osmAttr + ', <a href="https://opentopomap.org/">OpenTopoMap</a>',
+        code: 'u'
+    });
+
+    var debug = L.tileLayer("/debug/{z}/{x}/{y}/debug.png", {
+        maxZoom: 14,
+        attribution: "debug",
+        code: 'u'
+    });
+
+    var debug512 = L.tileLayer("/debug512/{z}/{x}/{y}/debug512.png", {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        maxZoom: 14,
+        attribution: "debug",
+        code: 'u'
+    });
+
+    var lr1 = L.tileLayer("/lr1/{z}/{x}/{-y}/tile.png", {
+        minZoom: 1,
+        maxZoom: 14,
+        attribution: osmAttr,
+        code: 'u'
+    }).addTo(map);
+
+    var lr2 = L.tileLayer("/lr1/{z}/{x}/{-y}/tile512.png", {
+        tileSize: 512,
+        zoomOffset: -1,
+        minZoom: 1,
+        maxZoom: 15,
+        attribution: osmAttr,
+        code: 'u'
+    });
+
+    L.control.layers({
+        "Lunarender (built-in style)": lr1,
+        "Lunarender (built-in style) / big": lr2,
+        "Mapnik": osm,
+        "Debug": debug,
+        "Debug 512": debug512,
+    }, {}).addTo(map);
+
+    var ZoomViewer = L.Control.extend({
+		onAdd: function () {
+			var gauge = L.DomUtil.create('div');
+			gauge.style.width = '200px';
+			gauge.style.background = 'rgba(255,255,255,0.5)';
+			gauge.style.textAlign = 'left';
+			map.on('zoomstart zoom zoomend', function (ev) {
+				gauge.innerHTML = 'Zoom level: ' + map.getZoom();
+			});
+			return gauge;
+		}
+	});
+
+	var zoomViewer = (new ZoomViewer()).addTo(map);
+
+  var hash = new L.Hash(map);
+    </script>
+  </body>
+</html>
