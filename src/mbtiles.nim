@@ -4,7 +4,10 @@
 
 import std/db_sqlite
 
-proc openTiles*(fileName: string): DbConn =
+type
+    MBTilesConnection* = DbConn
+
+proc openTiles*(fileName: string): MBTilesConnection =
     result = db_sqlite.open(fileName, "", "", "")
 
 proc getTile*(db: DbConn, x: int, y: int, z: int): string =

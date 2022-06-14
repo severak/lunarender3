@@ -11,7 +11,20 @@ import os
 
 let ffPng = PngFormat  # pixie probably renamed this
 
-proc server(data="test.mbtiles", host="", port=5000, cache="") =
+proc mergeFixTile(tile: var Tile, mapdata: MBTilesConnection, x: int, y: int, z: int): Tile =
+  let offsets: array[4, TilePoint] = [TilePoint(-1,0), TilePoint(1,0), TilePoint(0, -1), TilePoint(0, 1)]
+  for offsetVec in offsets:
+    var addedTile = mapdata.getTile(offsetVec.x + x, offsetVec.y + y, z)
+    echo $(offsetVec.x) & "," & $(offsetVec.y)
+    if addedTile != "":
+      var addedTileData = decodeVectorTile(addedTile)
+      for addedFeat in addedTileData.features:
+        for pointColl in addedFeat.geometry:
+          for point in pointColl:
+            var nupoint = point + offsetVec
+
+
+proc server(data="test.mbtiles", host="", port=5000, cache="", mergeFix=false) =
   ## starts tile-serving server
   var mapdata = openTiles(data)
 
@@ -46,6 +59,8 @@ proc server(data="test.mbtiles", host="", port=5000, cache="") =
       if tile == "":
         resp Http404
       var tileDecoded = decodeVectorTile(tile)
+      if mergeFix:
+        mergeFixTile(tile, mapdata, x, y, z)
       var rules = makeExampleRuleset()
       var image = drawTile(tileDecoded, rules, 256, z)
       if cache != "":

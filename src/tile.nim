@@ -30,6 +30,8 @@ type
     Tile* = object 
         features*: seq[Feature]
 
+    TilePoint* = Vec2
+
 proc toDrawType*(ftype: vector_tile_Tile_GeomType): FeatDrawType =
     case ftype:
         of UNKNOWN: 
