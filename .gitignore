@@ -2,3 +2,5 @@ nimcache/
 nimblecache/
 htmldocs/
 cache/
+nimble.develop
+nimble.paths
