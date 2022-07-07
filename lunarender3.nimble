@@ -18,7 +18,7 @@ requires "pixie >= 3.1.2"
 requires "nimpb >= 0.2.0"
 requires "zippy >= 0.7.4"
 requires "cligen >= 1.5.20"
-required "benchy >= 0.0.1"
+requires "benchy >= 0.0.1"
 requires "lua >= 1.0"
 
 task genparser, "Generates MVT parser.":
